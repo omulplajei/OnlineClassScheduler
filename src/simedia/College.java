@@ -358,7 +358,9 @@ class College {
         String choice = sc.nextLine();
 
         while (!choice.matches("^\\s*[1-9]\\d*(?:\\s*,\\s*[1-9]\\d*)*$")) {
-            if (choice.equals("0")){return;}
+            if (choice.equals("0")) {
+                return;
+            }
             System.out.print("Enter valid numbers(Id): ");
             choice = sc.nextLine();
         }
@@ -424,7 +426,9 @@ class College {
         String choice = sc.nextLine();
 
         while (!choice.matches("^\\s*[1-9]\\d*(?:\\s*,\\s*[1-9]\\d*)*$")) {
-            if (choice.equals("0")){return;}
+            if (choice.equals("0")) {
+                return;
+            }
             System.out.print("Enter valid numbers(Id): ");
             choice = sc.nextLine();
         }
@@ -535,32 +539,32 @@ class College {
         return str;
     }
 
-    void printClassrooms(){
-        if (classrooms.size() == 0){
+    void printClassrooms() {
+        if (classrooms.size() == 0) {
             System.out.println("There are no classrooms yet!");
             return;
         }
-        for (Classroom classroom:classrooms
-             ) {
+        for (Classroom classroom : classrooms
+        ) {
             System.out.println(classroom);
         }
     }
 
-    void addAppointmentToClass(CollegeClass collegeClass, Scanner sc){
+    void addAppointmentToClass(CollegeClass collegeClass, Scanner sc) {
         printClassrooms();
         System.out.print("Enter classroom number to make an appointment: ");
-        while (!sc.hasNextInt()){
+        while (!sc.hasNextInt()) {
             System.out.print("Wrong input. Enter classroom number to make an appointment: ");
             sc.next();
         }
         int classroomNumber = sc.nextInt();
-        for (Classroom classroom:classrooms
-             ) {
-            if (classroom.getClassroomNumber() == classroomNumber){
-                System.out.print("Enter the date you want to make an appointment ("+ LocalDate.now().plusDays(3) +"):  ");
+        for (Classroom classroom : classrooms
+        ) {
+            if (classroom.getClassroomNumber() == classroomNumber) {
+                System.out.print("Enter the date you want to make an appointment (" + LocalDate.now().plusDays(3) + "):  ");
                 String date = sc.nextLine();
-                while (!date.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$")){
-                    System.out.print("Wrong input! Enter the date you want to make an appointment ("+ LocalDate.now().plusDays(3) + "):  ");
+                while (!date.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$")) {
+                    System.out.print("Wrong input! Enter the date you want to make an appointment (" + LocalDate.now().plusDays(3) + "):  ");
                 }
                 LocalDate dateOfAppointment = LocalDate.parse(date);
 
@@ -568,44 +572,85 @@ class College {
         }
         System.out.println("No such classroomnumber!");
     }
-    void makeAppointment(CollegeClass collegeClass, Classroom classroom, LocalDate date, int position){
-        collegeClass.getAppointments().add(new Appointment(classroom, date,position));
-        classroom.addToSchedule(date,position,collegeClass.getSpeciality());
+
+    void makeAppointment(CollegeClass collegeClass, Classroom classroom, LocalDate date, int position) {
+        collegeClass.getAppointments().add(new Appointment(classroom, date, position));
+        classroom.addToSchedule(date, position, collegeClass.getSpeciality());
     }
-    void createClassroom(Scanner sc){
+
+    void createClassroom(Scanner sc) {
         System.out.print("Enter the seats for your classroom: ");
-        while (!sc.hasNextInt()){
+        while (!sc.hasNextInt()) {
             System.out.print("Wrong input! Enter the seats for your classroom: ");
             sc.next();
         }
         int seats = sc.nextInt();
-        if (seats<10 ||seats>200){
+        if (seats < 10 || seats > 200) {
             System.out.println("Can't crate a classroom with that amount of seats.");
             return;
         }
         classrooms.add(new Classroom(seats));
     }
 
-    void deleteClassroom(Scanner sc){
-        if (classrooms.size() == 0){
+    void deleteClassroom(Scanner sc) {
+        if (classrooms.size() == 0) {
             System.out.println("There are no classroms in the college!");
             return;
         }
         printClassrooms();
         System.out.print("Select the number of classroom you want to delete: ");
-        while (!sc.hasNextInt()){
+        while (!sc.hasNextInt()) {
             System.out.print("Wrong input! Select the number of classroom you want to delete: ");
             sc.next();
         }
         int numberOfClassToDelete = sc.nextInt();
-        for (Classroom classroom:classrooms
-             ) {
-            if (classroom.getClassroomNumber() == numberOfClassToDelete){
+        for (Classroom classroom : classrooms
+        ) {
+            if (classroom.getClassroomNumber() == numberOfClassToDelete) {
                 classrooms.remove(classroom);
                 return;
             }
         }
         System.out.println("You entered a number but is not a classroom number.");
+    }
+
+    void printClassroomSchedule(Scanner sc) {
+        if (classrooms.size() == 0) {
+            System.out.println("There are no classroms in the college!");
+            return;
+        }
+        printClassrooms();
+        System.out.print("Select the number of classroom you want see schedule: ");
+        while (!sc.hasNextInt()) {
+            System.out.print("Wrong input! Select the number of classroom you want see schedule: ");
+            sc.next();
+        }
+        int numberOfClassToDelete = sc.nextInt();
+        for (Classroom classroom : classrooms
+        ) {
+            if (classroom.getClassroomNumber() == numberOfClassToDelete) {
+                classroom.printSchedule();
+                return;
+            }
+        }
+        System.out.println("You entered a number but is not a classroom number.");
+    }
+
+    Classroom getclassroom(Scanner sc) {
+        printClassrooms();
+        System.out.print("Select classroom by id for your appointment: ");
+        while (!sc.hasNextInt()) {
+            System.out.print("Wrong input! Select classroom by id for your appointment: ");
+            sc.next();
+        }
+        int classroomNumber = sc.nextInt();
+        for (Classroom classroom : classrooms
+        ) {
+            if (classroom.getClassroomNumber() == classroomNumber){
+                return classroom;
+            }
+        }
+        return null;
     }
 
 }

@@ -18,10 +18,10 @@ public class Main {
 
         boolean stayInLoop = true;
 
-        while (stayInLoop){
+        while (stayInLoop) {
             balcescu.printCollege();
             String choice = makeAChoiceMain(scanner);
-            switch (choice){
+            switch (choice) {
                 case "a":
                     balcescu.createStudent(scanner);
                     stayInLoop = continueProgram();
@@ -60,7 +60,7 @@ public class Main {
                     break;
                 case "j":
                     CollegeClass classToManage = balcescu.selectCollegeClass(scanner);
-                    if (classToManage == null){
+                    if (classToManage == null) {
                         System.out.println("You didn't sellect any class.");
                         break;
                     }
@@ -73,40 +73,100 @@ public class Main {
                                 System.out.println(classToManage);
                                 stayInClassManagement = continueProgram();
                                 break;
-                        case "b":
-                            classToManage.addStudents(balcescu.selectStudents("add to class", scanner));
-                            System.out.println(classToManage);
-                            stayInClassManagement = continueProgram();
-                            break;
-                        case "c":
-                            classToManage.deleteStudents(scanner);
-                            stayInClassManagement = continueProgram();
-                            break;
-                        case "d":
-                            classToManage.setTeacher(null);
-                            stayInClassManagement = continueProgram();
-                            break;
-                        case "e":
-                            classToManage.printStudents();
-                            stayInClassManagement = continueProgram();
-                            break;
-                        case "f":
-                            System.out.print("Input the number of maximum students of the class. Should be between 5 and 50: ");
-                            while (!scanner.hasNextInt()){
-                                System.out.print("Wrong input. Enter the number of maximum students of the class: ");
-                            }
-                            int maxStudents = scanner.nextInt();
-                            if (maxStudents>50 || maxStudents<5){
-                                System.out.println("Invalid number. The maximum number of students will remain the same");
-                                maxStudents = classToManage.getMaximumStudents();
-                            }
-                            classToManage.setMaximumStudents(maxStudents);
-                            stayInClassManagement = continueProgram();
-                            break;
-                        case "g":
-                            classToManage.printAppointments();
-                        case "q":
-                            stayInClassManagement = false;
+                            case "b":
+                                classToManage.addStudents(balcescu.selectStudents("add to class", scanner));
+                                System.out.println(classToManage);
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "c":
+                                classToManage.deleteStudents(scanner);
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "d":
+                                classToManage.setTeacher(null);
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "e":
+                                classToManage.printStudents();
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "f":
+                                System.out.print("Input the number of maximum students of the class. Should be between 5 and 50: ");
+                                while (!scanner.hasNextInt()) {
+                                    System.out.print("Wrong input. Enter the number of maximum students of the class: ");
+                                }
+                                int maxStudents = scanner.nextInt();
+                                if (maxStudents > 50 || maxStudents < 5) {
+                                    System.out.println("Invalid number. The maximum number of students will remain the same");
+                                    maxStudents = classToManage.getMaximumStudents();
+                                }
+                                classToManage.setMaximumStudents(maxStudents);
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "g":
+                                classToManage.printAppointments();
+                            case "h":
+                                Classroom classroom = balcescu.getclassroom(scanner);
+                                classroom.printSchedule();
+                                System.out.println("Input the date for class appointment.");
+                                int year = 0;
+                                int month = 0;
+                                int day = 0;
+                                boolean isYearValid = false;
+                                while (!isYearValid) {
+                                    System.out.print("Year = ");
+                                    while (!scanner.hasNextInt()) {
+                                        System.out.print("Wrong input! Year = ");
+                                        scanner.next();
+                                    }
+                                    year = scanner.nextInt();
+                                    if (year>=2019 && year<2021){
+                                        isYearValid = true;
+                                    }
+                                    else {
+                                        System.out.println("Year must be between 2019 and 2021");
+                                    }
+                                }
+                                boolean isMonthValid = false;
+                                while (!isMonthValid) {
+                                    System.out.print("Month = ");
+                                    while (!scanner.hasNextInt()) {
+                                        System.out.print("Wrong input! Year = ");
+                                        scanner.next();
+                                    }
+                                    month = scanner.nextInt();
+                                    if (year==2019 && (month<10 || month>12)){
+                                        isMonthValid = true;
+                                    }
+                                    else if (month>1 && month<12){
+                                        isMonthValid = true;
+                                    }
+                                    else {
+                                        System.out.println("You entered a wrong month!");
+                                    }
+                                }
+                                boolean isDayValid = false;
+                                while (!isMonthValid) {
+                                    System.out.print("Month = ");
+                                    while (!scanner.hasNextInt()) {
+                                        System.out.print("Wrong input! Year = ");
+                                        scanner.next();
+                                    }
+                                    month = scanner.nextInt();
+                                    if (year==2019 && (month<10 || month>12)){
+                                        isMonthValid = true;
+                                    }
+                                    else if (month>1 && month<12){
+                                        isMonthValid = true;
+                                    }
+                                    else {
+                                        System.out.println("You entered a wrong month!");
+                                    }
+                                }
+
+
+                            case "q":
+                                stayInClassManagement = false;
                         }
                     }
                     stayInLoop = continueProgram();
@@ -120,6 +180,7 @@ public class Main {
                     balcescu.printClassrooms();
                     break;
                 case "n":
+                    balcescu.printClassroomSchedule(scanner);
                     break;
             }
 
@@ -127,7 +188,7 @@ public class Main {
 
     }
 
-    static List<Student> initStudents(){
+    static List<Student> initStudents() {
 
         List<Student> students = new ArrayList<>();
         students.add(new Student("George Vizitiu", "georgevizitiu@gmail.com", 3, 21, "m"));
@@ -177,22 +238,24 @@ public class Main {
         students.add(new Student("Ofelia Nastase", "ofi@gmail.com", 4, 25, "f"));
         return students;
     }
-    static List<Teacher> initTeachers(){
+
+    static List<Teacher> initTeachers() {
         List<Teacher> teachers = new ArrayList<>();
-        teachers.add(new Teacher("Alexandru Avram", "alexandruavram@gmail.com", "mathematics", "0734653675", "m" ));
-        teachers.add(new Teacher("Christine Correa", "christinecorrea@yahoo.com", "english", "0778990765", "f" ));
-        teachers.add(new Teacher("Alice Clegg", "aliceclegg@gmail.com", "music", "0723554335", "f" ));
-        teachers.add(new Teacher("Bonita Knox", "bonitaknox@gmail.com", "sexology", "0789898989", "f" ));
-        teachers.add(new Teacher("Emilia Ciorcila", "emiliaciorcila@yahoo.com", "psychology", "0765437765", "f" ));
-        teachers.add(new Teacher("Bianca Antono", "biancaanton@gmail.com", "physics", "0788554766", "f" ));
-        teachers.add(new Teacher("Laurentiu Coman", "laurentiucoman@gmail.com", "philosophy", "0782112332", "m" ));
-        teachers.add(new Teacher("Victor Tomescu", "victort@gmail.com", "biology", "0743675665", "m" ));
-        teachers.add(new Teacher("Andrei Folta", "foltaandrei@gmail.com", "chemistry", "0723685746", "m" ));
-        teachers.add(new Teacher("Anca Petrescu", "ancapeterscu@gmail.com", "history", "0734566734", "f" ));
-        teachers.add(new Teacher("Liviu Topan", "liviu topan@gmail.com", "religion", "0733545454", "m" ));
+        teachers.add(new Teacher("Alexandru Avram", "alexandruavram@gmail.com", "mathematics", "0734653675", "m"));
+        teachers.add(new Teacher("Christine Correa", "christinecorrea@yahoo.com", "english", "0778990765", "f"));
+        teachers.add(new Teacher("Alice Clegg", "aliceclegg@gmail.com", "music", "0723554335", "f"));
+        teachers.add(new Teacher("Bonita Knox", "bonitaknox@gmail.com", "sexology", "0789898989", "f"));
+        teachers.add(new Teacher("Emilia Ciorcila", "emiliaciorcila@yahoo.com", "psychology", "0765437765", "f"));
+        teachers.add(new Teacher("Bianca Antono", "biancaanton@gmail.com", "physics", "0788554766", "f"));
+        teachers.add(new Teacher("Laurentiu Coman", "laurentiucoman@gmail.com", "philosophy", "0782112332", "m"));
+        teachers.add(new Teacher("Victor Tomescu", "victort@gmail.com", "biology", "0743675665", "m"));
+        teachers.add(new Teacher("Andrei Folta", "foltaandrei@gmail.com", "chemistry", "0723685746", "m"));
+        teachers.add(new Teacher("Anca Petrescu", "ancapeterscu@gmail.com", "history", "0734566734", "f"));
+        teachers.add(new Teacher("Liviu Topan", "liviu topan@gmail.com", "religion", "0733545454", "m"));
         return teachers;
     }
-    static List<CollegeClass> initClasses(){
+
+    static List<CollegeClass> initClasses() {
         List<CollegeClass> classes = new ArrayList<>();
         classes.add(new CollegeClass("mathematics"));
         classes.add(new CollegeClass("history"));
@@ -202,7 +265,8 @@ public class Main {
         classes.add(new CollegeClass("commerce"));
         return classes;
     }
-    private static String makeAChoiceMain(Scanner sc){
+
+    private static String makeAChoiceMain(Scanner sc) {
 
         System.out.println("a) Add student to college");
         System.out.println("b) Delete student from college");
@@ -225,7 +289,7 @@ public class Main {
         System.out.print("Input the letter which represents your choice: ");
         str = sc.nextLine();
 
-        while (!str.matches("[abcdefghijklmnq]")){
+        while (!str.matches("[abcdefghijklmnq]")) {
 
             System.out.print("You entered a wrong letter! Input the letter which represents your choice: ");
             str = sc.nextLine();
@@ -234,7 +298,8 @@ public class Main {
         return str;
 
     }
-    private static boolean continueProgram(){
+
+    private static boolean continueProgram() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter 'q' to exit program or something else to continue: ");
         String check = scanner.nextLine();
