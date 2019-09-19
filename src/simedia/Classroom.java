@@ -23,13 +23,22 @@ public class Classroom {
         return classroomNumber;
     }
 
+    public Map<DatePosition, String> getSchedule() {
+        return schedule;
+    }
+
     void addToSchedule(LocalDate date, int position, String speciality) {
         DatePosition datePosition = new DatePosition(date, position);
-        if (schedule.containsKey(datePosition)) {
-            System.out.println("Is occupied!");
-            return;
+
+        for (Map.Entry<DatePosition,String> entry:schedule.entrySet()
+        ) {
+            if (entry.getKey().equals(datePosition)){
+                System.out.println("Is occupied!");
+                return;
+            }
         }
-        schedule.put(datePosition, speciality);
+
+        schedule.putIfAbsent(datePosition, speciality);
     }
 
     void printSchedule() {

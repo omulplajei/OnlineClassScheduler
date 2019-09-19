@@ -16,8 +16,16 @@ public class DatePosition {
         return position;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getLocalDate() {
         return date;
+    }
+
+    public boolean equals(DatePosition datePosition) {
+
+        if (datePosition.getLocalDate().isEqual(this.date)&&datePosition.getPosition() == this.position){
+            return true;
+        }
+        return false;
     }
 
     @Override

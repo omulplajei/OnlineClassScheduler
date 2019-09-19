@@ -24,11 +24,19 @@ public class CollegeClass {
         return id;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
     String getSpeciality() {
         return speciality;
     }
 
     void setMaximumStudents(int maximumStudents) {
+        if (students.size()>maximumStudents){
+            System.out.println("You have " + students.size() + " students in the class so you have to remove " + (students.size()-maximumStudents) + " students to be able to change the maximum number of students to " + maximumStudents + ".");
+            return;
+        }
         this.maximumStudents = maximumStudents;
     }
 
@@ -129,9 +137,13 @@ public class CollegeClass {
     }
 
     void printAppointments(){
+        if (appointments.size() == 0){
+            System.out.println("No appointments yet!");
+        }
+        int appointmentNumber = 1;
         for (Appointment appointment:appointments
         ) {
-            System.out.println(appointment);
+            System.out.println("Appointment number = " + appointmentNumber++ + " - " + appointment);
         }
     }
 

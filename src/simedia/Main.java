@@ -1,8 +1,10 @@
 package simedia;
 
+import javax.sound.midi.Soundbank;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -23,42 +25,52 @@ public class Main {
             String choice = makeAChoiceMain(scanner);
             switch (choice) {
                 case "a":
+                case "A":
                     balcescu.createStudent(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "b":
+                case "B":
                     balcescu.deleteStudentsFromCollege(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "c":
+                case "C":
                     balcescu.createTeacher(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "d":
+                case "D":
                     balcescu.deleteTeachersFromCollege(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "e":
+                case "E":
                     balcescu.printStudents();
                     stayInLoop = continueProgram();
                     break;
                 case "f":
+                case "F":
                     balcescu.printTeachers();
                     stayInLoop = continueProgram();
                     break;
                 case "g":
+                case "G":
                     balcescu.createCollegeClass(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "h":
+                case "H":
                     balcescu.deleteCollegeClass(scanner);
                     stayInLoop = continueProgram();
                     break;
                 case "i":
+                case "I":
                     balcescu.printClasses();
                     stayInLoop = continueProgram();
                     break;
                 case "j":
+                case "J":
                     CollegeClass classToManage = balcescu.selectCollegeClass(scanner);
                     if (classToManage == null) {
                         System.out.println("You didn't sellect any class.");
@@ -69,33 +81,40 @@ public class Main {
                         String choiceForClass = balcescu.makeAChoiceManageClass(classToManage, scanner);
                         switch (choiceForClass) {
                             case "a":
+                            case "A":
                                 classToManage.setTeacher(balcescu.selectTeacherById("add to class", scanner));
                                 System.out.println(classToManage);
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "b":
+                            case "B":
                                 classToManage.addStudents(balcescu.selectStudents("add to class", scanner));
                                 System.out.println(classToManage);
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "c":
+                            case "C":
                                 classToManage.deleteStudents(scanner);
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "d":
+                            case "D":
                                 classToManage.setTeacher(null);
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "e":
+                            case "E":
                                 classToManage.printStudents();
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "f":
+                            case "F":
                                 System.out.print("Input the number of maximum students of the class. Should be between 5 and 50: ");
                                 while (!scanner.hasNextInt()) {
                                     System.out.print("Wrong input. Enter the number of maximum students of the class: ");
                                 }
                                 int maxStudents = scanner.nextInt();
+                                scanner.nextLine();
                                 if (maxStudents > 50 || maxStudents < 5) {
                                     System.out.println("Invalid number. The maximum number of students will remain the same");
                                     maxStudents = classToManage.getMaximumStudents();
@@ -104,89 +123,143 @@ public class Main {
                                 stayInClassManagement = continueProgram();
                                 break;
                             case "g":
+                            case "G":
                                 classToManage.printAppointments();
+                                stayInClassManagement = continueProgram();
+                                break;
                             case "h":
+                            case "H":
                                 Classroom classroom = balcescu.getclassroom(scanner);
+                                if (classroom == null) {
+                                    break;
+                                }
+                                if (classToManage.getStudents().size()>classroom.getSeats()){
+                                    System.out.println("The classroom is to small for you!");
+                                    break;
+                                }
                                 classroom.printSchedule();
-                                System.out.println("Input the date for class appointment.");
-                                int year = 0;
-                                int month = 0;
-                                int day = 0;
-                                boolean isYearValid = false;
-                                while (!isYearValid) {
-                                    System.out.print("Year = ");
+                                System.out.print("Input the date for class appointment(must be from tomorrow and an year from now) (yyyy-mm-dd): ");
+                                String date = scanner.nextLine();
+                                while (!isDateValid(date)) {
+                                    System.out.print("Wrong input! Input the date for class appointment(must be from tomorrow and an year from now) (yyyy-mm-dd): ");
+                                    date = scanner.nextLine();
+                                }
+                                System.out.println("1. 08:00 - 10:00");
+                                System.out.println("2. 11:00 - 13:00");
+                                System.out.println("3. 14:00 - 16:00");
+                                System.out.println("4. 17:00 - 19:00");
+                                System.out.println();
+                                System.out.print("Select the position you want for your appointment: ");
+                                Integer position = 0;
+                                boolean isPositionCorrect = false;
+                                while (!isPositionCorrect) {
                                     while (!scanner.hasNextInt()) {
-                                        System.out.print("Wrong input! Year = ");
+                                        System.out.println("Wrong input! Select the position you want for your appointment(from 1 to 4): ");
                                         scanner.next();
                                     }
-                                    year = scanner.nextInt();
-                                    if (year>=2019 && year<2021){
-                                        isYearValid = true;
-                                    }
-                                    else {
-                                        System.out.println("Year must be between 2019 and 2021");
+                                    position = scanner.nextInt();
+                                    scanner.nextLine();
+                                    if (position > 4 || position < 1) {
+                                        System.out.println("Wrong input. Must be between 1 and 4 inclusive.");
+                                    } else {
+                                        isPositionCorrect = true;
                                     }
                                 }
-                                boolean isMonthValid = false;
-                                while (!isMonthValid) {
-                                    System.out.print("Month = ");
-                                    while (!scanner.hasNextInt()) {
-                                        System.out.print("Wrong input! Year = ");
-                                        scanner.next();
-                                    }
-                                    month = scanner.nextInt();
-                                    if (year==2019 && (month<10 || month>12)){
-                                        isMonthValid = true;
-                                    }
-                                    else if (month>1 && month<12){
-                                        isMonthValid = true;
-                                    }
-                                    else {
-                                        System.out.println("You entered a wrong month!");
+                                DatePosition datePosition = new DatePosition(LocalDate.parse(date), position);
+                                boolean isOccupied = false;
+                                for (Map.Entry<DatePosition, String> entry : classroom.getSchedule().entrySet()
+                                ) {
+                                    if (entry.getKey().equals(datePosition)) {
+                                        isOccupied = true;
+                                        break;
                                     }
                                 }
-                                boolean isDayValid = false;
-                                while (!isMonthValid) {
-                                    System.out.print("Month = ");
-                                    while (!scanner.hasNextInt()) {
-                                        System.out.print("Wrong input! Year = ");
-                                        scanner.next();
+                                if (isOccupied) {
+                                    System.out.println("Classroom is occupied in that interval!");
+                                } else {
+                                    boolean appointmentOk = false;
+                                    Appointment appToMake = new Appointment(classroom, LocalDate.parse(date), position);
+                                    for (Appointment appointmentToCheck : classToManage.getAppointments()
+                                    ) {
+                                        if (appointmentToCheck.getDatePosition().equals(appToMake.getDatePosition())) {
+                                            System.out.println("You already have an appointment at that hour in classroom number " + appointmentToCheck.getClassroom().getClassroomNumber() + ".");
+                                            appointmentOk = true;
+                                            break;
+                                        }
                                     }
-                                    month = scanner.nextInt();
-                                    if (year==2019 && (month<10 || month>12)){
-                                        isMonthValid = true;
-                                    }
-                                    else if (month>1 && month<12){
-                                        isMonthValid = true;
-                                    }
-                                    else {
-                                        System.out.println("You entered a wrong month!");
+
+                                    if (!appointmentOk) {
+                                        classToManage.addAppointment(classroom, LocalDate.parse(date), position);
+                                        classroom.addToSchedule(LocalDate.parse(date), position, classToManage.getSpeciality());
                                     }
                                 }
 
+                                stayInClassManagement = continueProgram();
+                                break;
+                            case "i":
+                                classToManage.printAppointments();
+                                System.out.println();
+                                System.out.print("Enter the number of the appointment you want to delete: ");
+                                while (!scanner.hasNextInt()) {
+                                    System.out.print("Wrong number! Enter the number of the appointment you want to delete: ");
+                                    scanner.next();
+                                }
+                                int appointmentNumber = scanner.nextInt();
+                                scanner.nextLine();
+                                boolean isNumberValid = false;
+                                for (Appointment appointment : classToManage.getAppointments()
+                                ) {
+                                    if (appointmentNumber > classToManage.getAppointments().size() || appointmentNumber < 1) {
+                                        System.out.println("Wrong input.");
+                                        break;
+                                    } else {
+                                        isNumberValid = true;
+                                    }
+                                }
+                                for (Map.Entry<DatePosition, String> entry : classToManage.getAppointments().get(appointmentNumber-1).getClassroom().getSchedule().entrySet()
+                                ) {
+                                    if (entry.getKey().equals(classToManage.getAppointments().get(appointmentNumber-1).getDatePosition())) {
+                                        classToManage.getAppointments().get(appointmentNumber-1).getClassroom().getSchedule().remove(entry.getKey());
+                                        break;
+                                    }
+                                }
+                                classToManage.getAppointments().remove(classToManage.getAppointments().get(appointmentNumber-1));
+                                break;
 
-                            case "q":
-                                stayInClassManagement = false;
-                        }
+                        case "q":
+                        case "Q":
+                            stayInClassManagement = false;
                     }
-                    stayInLoop = continueProgram();
-                    break;
-                case "k":
-                    balcescu.createClassroom(scanner);
-                    break;
-                case "l":
-                    balcescu.deleteClassroom(scanner);
-                case "m":
-                    balcescu.printClassrooms();
-                    break;
-                case "n":
-                    balcescu.printClassroomSchedule(scanner);
-                    break;
             }
-
+            stayInLoop = continueProgram();
+            break;
+            case "k":
+            case "K":
+                balcescu.createClassroom(scanner);
+                stayInClassManagement = continueProgram();
+                break;
+            case "l":
+            case "L":
+                balcescu.deleteClassroom(scanner);
+                stayInClassManagement = continueProgram();
+            case "m":
+            case "M":
+                balcescu.printClassrooms();
+                stayInClassManagement = continueProgram();
+                break;
+            case "n":
+            case "N":
+                balcescu.printClassroomSchedule(scanner);
+                stayInClassManagement = continueProgram();
+                break;
+            case "q":
+            case "Q":
+                return;
         }
 
     }
+
+}
 
     static List<Student> initStudents() {
 
@@ -284,12 +357,11 @@ public class Main {
         System.out.println("n) List timetable of classroom");
         System.out.println("q) Exit the program");
         System.out.println();
-
         String str;
         System.out.print("Input the letter which represents your choice: ");
         str = sc.nextLine();
 
-        while (!str.matches("[abcdefghijklmnq]")) {
+        while (!str.matches("[ABCDEFGHIJKLMNabcdefghijklmnq]")) {
 
             System.out.print("You entered a wrong letter! Input the letter which represents your choice: ");
             str = sc.nextLine();
@@ -305,5 +377,16 @@ public class Main {
         String check = scanner.nextLine();
         return (!check.equals("q"));
 
+    }
+
+    static boolean isDateValid(String date) {
+        try {
+            LocalDate date1 = LocalDate.parse(date);
+            if (date1.isAfter(LocalDate.now()) && date1.isBefore(LocalDate.now().plusYears(1))) {
+                return true;
+            } else return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

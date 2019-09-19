@@ -107,6 +107,7 @@ class College {
             System.out.print("Wrong input! Select teacher by id to" + purpose + ": ");
         }
         int teacherId = sc.nextInt();
+        sc.nextLine();
         for (Teacher teacher : teachers
         ) {
             if (teacher.getId() == teacherId) {
@@ -217,6 +218,7 @@ class College {
         }
         CollegeClass colegeToDelete = null;
         int id = sc.nextInt();
+        sc.nextLine();
         for (CollegeClass collegeClass : classes
         ) {
             if (collegeClass.getId() == id) {
@@ -309,6 +311,7 @@ class College {
                 sc.next();
             }
             age = sc.nextInt();
+            sc.nextLine();
             if (age < 0 || age > 120) {
                 System.out.print("Your input can't be an age. Please enter a valid age.");
             } else if (age < 10) {
@@ -333,6 +336,7 @@ class College {
                 sc.next();
             }
             stage = sc.nextInt();
+            sc.nextLine();
             if (stage < 1 || stage > 4) {
                 System.out.print("Your input is not a valid stage. Please enter a valid stage: ");
             } else {
@@ -501,6 +505,7 @@ class College {
             sc.next();
         }
         int id = sc.nextInt();
+        sc.nextLine();
         for (CollegeClass collegeClass : classes
         ) {
             if (collegeClass.getId() == id) {
@@ -530,7 +535,7 @@ class College {
         System.out.print("Input the letter which represents your choice: ");
         str = sc.nextLine();
 
-        while (!str.matches("[abcdefgq]")) {
+        while (!str.matches("[ABCDEFGHIQabcdefghiq]")) {
 
             System.out.print("You entered a wrong letter! Input the letter which represents your choice: ");
             str = sc.nextLine();
@@ -558,6 +563,7 @@ class College {
             sc.next();
         }
         int classroomNumber = sc.nextInt();
+        sc.nextLine();
         for (Classroom classroom : classrooms
         ) {
             if (classroom.getClassroomNumber() == classroomNumber) {
@@ -585,6 +591,7 @@ class College {
             sc.next();
         }
         int seats = sc.nextInt();
+        sc.nextLine();
         if (seats < 10 || seats > 200) {
             System.out.println("Can't crate a classroom with that amount of seats.");
             return;
@@ -604,6 +611,7 @@ class College {
             sc.next();
         }
         int numberOfClassToDelete = sc.nextInt();
+        sc.nextLine();
         for (Classroom classroom : classrooms
         ) {
             if (classroom.getClassroomNumber() == numberOfClassToDelete) {
@@ -626,6 +634,7 @@ class College {
             sc.next();
         }
         int numberOfClassToDelete = sc.nextInt();
+        sc.nextLine();
         for (Classroom classroom : classrooms
         ) {
             if (classroom.getClassroomNumber() == numberOfClassToDelete) {
@@ -637,13 +646,18 @@ class College {
     }
 
     Classroom getclassroom(Scanner sc) {
+        if (classrooms.size()==0){
+            System.out.println("There is no classroom yet!");
+            return null;
+        }
         printClassrooms();
-        System.out.print("Select classroom by id for your appointment: ");
+        System.out.print("Select the classroom number for your appointment: ");
         while (!sc.hasNextInt()) {
             System.out.print("Wrong input! Select classroom by id for your appointment: ");
             sc.next();
         }
         int classroomNumber = sc.nextInt();
+        sc.nextLine();
         for (Classroom classroom : classrooms
         ) {
             if (classroom.getClassroomNumber() == classroomNumber){
