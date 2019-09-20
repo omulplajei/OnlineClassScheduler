@@ -27,8 +27,7 @@ public class Classroom {
         return schedule;
     }
 
-    void addToSchedule(LocalDate date, int position, String speciality) {
-        DatePosition datePosition = new DatePosition(date, position);
+    void addToSchedule(DatePosition datePosition, String speciality) {
 
         for (Map.Entry<DatePosition,String> entry:schedule.entrySet()
         ) {

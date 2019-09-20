@@ -190,7 +190,7 @@ public class Main {
 
                                     if (!appointmentOk) {
                                         classToManage.addAppointment(classroom, LocalDate.parse(date), position);
-                                        classroom.addToSchedule(LocalDate.parse(date), position, classToManage.getSpeciality());
+                                        classroom.addToSchedule(new DatePosition(LocalDate.parse(date), position), classToManage.getSpeciality());
                                     }
                                 }
 

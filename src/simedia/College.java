@@ -581,7 +581,7 @@ class College {
 
     void makeAppointment(CollegeClass collegeClass, Classroom classroom, LocalDate date, int position) {
         collegeClass.getAppointments().add(new Appointment(classroom, date, position));
-        classroom.addToSchedule(date, position, collegeClass.getSpeciality());
+        classroom.addToSchedule(new DatePosition(date, position), collegeClass.getSpeciality());
     }
 
     void createClassroom(Scanner sc) {
